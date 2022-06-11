@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class NetworkType(Enum):
-    TYPE_2G = ...
-    TYPE_3G = ...
-    TYPE_4G = ...
+class NetworkType(str, Enum):
+    TYPE_2G = "2g"
+    TYPE_3G = "3g"
+    TYPE_4G = "lte"

@@ -7,12 +7,6 @@ from .functions import rgba_to_mono
 
 
 @dataclass
-class Point:
-    x: float
-    y: float
-
-
-@dataclass
 class BoundingBox:
     x0: float
     y0: float
@@ -102,8 +96,8 @@ class Tile:
         pixels = []
 
         for row in np.array(image_mono.convert("L")):
-            for el in row:
-                pixels.append(el)
+            for pixel in row:
+                pixels.append(pixel)
 
         coverage_polygons = zip(pixels, polygons)
 

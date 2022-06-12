@@ -7,7 +7,8 @@
 Python script for gathering data about cellular network coverage of Russian cellular operators.  
 
 ## Roadmap:
-- implement getting Beeline coverage tiles
-- implement getting Megafon coverage tiles
+- <s>implement getting Beeline coverage tiles</s>
+- <s>implement getting Megafon coverage tiles</s>
+- <s>implement raster to vector pixel transformation</s>
 - implement getting OSM city coordinates
 - ...

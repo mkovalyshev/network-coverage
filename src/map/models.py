@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from webbrowser import get
 from shapely.geometry import Polygon
 import numpy as np
 import math

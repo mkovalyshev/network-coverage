@@ -19,6 +19,7 @@ class Beeline(Operator):
     ) -> object:
         super().__init__(schema=schema, host=host)
         self.method = method
+        self.name = "Beeline"
 
     def get_tiles(self, x: int, y: int, zoom: int, network: NetworkType) -> Image.Image:
         """

@@ -17,10 +17,9 @@ class Megafon(Operator):
         host: str = "coverage-map.megafon.ru",
     ) -> object:
         super().__init__(schema=schema, host=host)
+        self.name = "Megafon"
 
-    def get_tiles(
-        self, x: int, y: int, zoom: int, network: NetworkType
-    ) -> Image.Image:
+    def get_tiles(self, x: int, y: int, zoom: int, network: NetworkType) -> Image.Image:
         """
         returns Megafon coverage tile for defined x, y, zoom map tile
         """
@@ -30,5 +29,6 @@ class Megafon(Operator):
         )
 
         image = PIL.Image.open(io.BytesIO(response.content))
+        image = image.convert("RGBA")
 
         return image

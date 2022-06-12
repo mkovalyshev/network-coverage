@@ -1,15 +1,65 @@
-import math
+from PIL import Image
+from urllib import response
+from dataclasses import dataclass
+import numpy as np
+import requests
+import re
 
 
-def get_tile_from_coordinates(lat: float, lon: float, zoom: int) -> tuple[int]:
+@dataclass
+class Point:
+    x: float
+    y: float
+
+
+def rgba_to_mono(image: object, threshold: int=64) -> object:
     """
-    returns tuple of web map tile x/y/zoom for defined coordinates and zoom
+    transforms RGBA image into mono
     """
 
-    x_tile = int((lon + 180) / 360 * (2**zoom))
+    threshold = 64
 
-    y_tile = int(
-        (1 - math.asinh(math.tan(math.radians(lat))) / math.pi) / 2 * (2**zoom)
-    )
+    image_mono_data = list()
 
-    return x_tile, y_tile, zoom
+    for row in np.array(image):
+        row_mono = list()
+        for pixel in row:
+            if pixel[-1] <= threshold:
+                row_mono.append(np.array([0, 0, 0, 0]))
+            else:
+                row_mono.append(np.array([255, 255, 255, 255]))
+        
+        image_mono_data.append(row_mono)
+
+    image_mono_data = np.array(image_mono_data)
+
+    image_mono = Image.fromarray(image_mono_data.astype(np.uint8))
+
+    return image_mono
+
+
+def coordinates_from_wiki(link: str) -> tuple[float]:
+    """
+    returns lat/lon coordinates as tuple from Wikipedia city article (tested only on ru.wikipedia.org)
+    """
+
+    regex = re.compile(r"lat.*:(\d+.\d+).*lon.*:(\d+.\d+)")
+
+    response = requests.get(link)
+    result = regex.search(response.text)
+
+    return Point(float(result.group(1)), float(result.group(2)))
+
+
+def name_from_wiki(link: str) -> str:
+    """
+    returns city name from Wikipedia
+    """
+
+    regex = re.compile(r"wgTitle\":\"(\w*?)\"")
+
+    response = requests.get(link)
+    result = regex.search(response.text)
+
+    return result.group(1)
+    

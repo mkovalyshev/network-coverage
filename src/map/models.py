@@ -3,6 +3,13 @@ from shapely.geometry import Polygon
 import numpy as np
 import math
 from PIL import Image
+from .functions import rgba_to_mono
+
+
+@dataclass
+class Point:
+    x: float
+    y: float
 
 
 @dataclass
@@ -90,9 +97,7 @@ class Tile:
                     Polygon([[x[0], y[1]], [x[1], y[1]], [x[1], y[0]], [x[0], y[0]]])
                 )
 
-        image_mono = image.convert("L").point(
-            lambda x: 255 if x > threshold else 0, mode="1"
-        )
+        image_mono = rgba_to_mono(image.convert("RGBA"))
 
         pixels = []
 

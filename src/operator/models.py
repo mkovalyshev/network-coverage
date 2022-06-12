@@ -1,4 +1,5 @@
 import PIL
+from PIL import Image
 
 
 class Operator:
@@ -10,7 +11,7 @@ class Operator:
         self.schema = schema
         self.host = host
 
-    def get_tiles(self, x, y, zoom) -> PIL.PngImagePlugin.PngImageFile:
+    def get_tiles(self, x, y, zoom) -> Image.Image:
         """
         returns coverage tile for defined x, y, zoom map tile
         """

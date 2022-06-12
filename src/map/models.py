@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 from webbrowser import get
-from shapely import Polygon
+from shapely.geometry import Polygon
 import numpy as np
 import math
-import PIL
+from PIL import Image
 
 
 @dataclass
@@ -60,7 +60,7 @@ class Tile:
         return BoundingBox(lon0, lat0, lon1, lat1)
 
     def get_coverage_polygons(
-        self, image: PIL.PngImagePlugin.PngImageFile
+        self, image: Image.Image, threshold: int = 254
     ) -> tuple[tuple]:
         """
         returns tuple of (polygon, coverage) tuples from defined image
@@ -80,15 +80,27 @@ class Tile:
 
             return pairs
 
-        x_pairs = get_coordinate_pairs(bbox[1][0], bbox[0][0])
-        y_pairs = get_coordinate_pairs(bbox[0][1], bbox[1][1])
+        x_pairs = get_coordinate_pairs(bbox.x0, bbox.x1)
+        y_pairs = get_coordinate_pairs(bbox.y1, bbox.y0)
 
-        polygon_list = []
+        polygons = []
 
         for y in y_pairs:
             for x in x_pairs:
-                polygon_list.append(
+                polygons.append(
                     Polygon([[x[0], y[1]], [x[1], y[1]], [x[1], y[0]], [x[0], y[0]]])
                 )
 
-        return polygon_list
+        image_mono = image.convert("L").point(
+            lambda x: 255 if x > threshold else 0, mode="1"
+        )
+
+        pixels = []
+
+        for row in np.array(image_mono.convert("L")):
+            for el in row:
+                pixels.append(el)
+
+        coverage_polygons = zip(pixels, polygons)
+
+        return coverage_polygons

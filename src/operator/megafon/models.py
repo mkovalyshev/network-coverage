@@ -1,5 +1,6 @@
 import requests
 import PIL
+from PIL import Image
 import io
 from ..models import Operator
 from .enum import NetworkType
@@ -19,7 +20,7 @@ class Megafon(Operator):
 
     def get_tiles(
         self, x: int, y: int, zoom: int, network: NetworkType
-    ) -> PIL.PngImagePlugin.PngImageFile:
+    ) -> Image.Image:
         """
         returns Megafon coverage tile for defined x, y, zoom map tile
         """

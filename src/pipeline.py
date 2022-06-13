@@ -6,6 +6,8 @@ from src.operator.beeline.models import Beeline
 from src.operator.beeline.enum import NetworkType as NetworkTypeBeeline
 from src.operator.megafon.models import Megafon
 from src.operator.megafon.enum import NetworkType as NetworkTypeMegafon
+from src.operator.mts.models import Mts
+from src.operator.mts.enum import NetworkType as NetworkTypeMts
 from typing import Union
 from shapely.geometry import Point
 
@@ -35,6 +37,8 @@ def check_network_coverage(
         network = NetworkTypeBeeline
     elif operator.name == "Megafon":
         network = NetworkTypeMegafon
+    elif operator.name == "MTS":
+        network = NetworkTypeMts
     else:
         raise KeyError(f"invalid operator {operator}")
 

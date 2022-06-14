@@ -10,6 +10,7 @@ from src.operator.mts.models import Mts
 from src.operator.mts.enum import NetworkType as NetworkTypeMts
 from typing import Union
 from shapely.geometry import Point
+import datetime
 
 
 def lookup_wiki(city: str) -> str:
@@ -20,8 +21,12 @@ def check_network_coverage(
     city: str, operator: Operator, lookup: bool = False, zoom: int = 8
 ) -> dict:
 
-    logger = get_logger(f"network-coverage {operator.name}")
-    logger.info("start")
+    # logger = get_logger(f"network-coverage {operator.name}")
+    # logger.info("start")
+
+    print(
+        f"[INFO] [{datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S.%f')}] [network-coverage] {operator.name}"
+    )
 
     if lookup:
         pass
@@ -46,7 +51,10 @@ def check_network_coverage(
         image = operator.get_tiles(tile.x, tile.y, tile.zoom, network_type)
 
         if image is None:
-            logger.info(f"no content for {network_type}")
+            # logger.info(f"no content for {network_type}")
+            print(
+                f"[INFO] [{datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S.%f')}] [network-coverage] no content for {network_type}"
+            )
             continue
 
         coverage_vector = list(tile.get_coverage_polygons(image))
@@ -57,7 +65,10 @@ def check_network_coverage(
         )
 
         if len(city_polygon) == 0:
-            logger.info("city polygon not found")
+            # logger.info("city polygon not found")
+            print(
+                f"[INFO] [{datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S.%f')}] [network-coverage] city polygon not found"
+            )
         else:
             response[network_type.name] = city_polygon[0][0] == 255
 

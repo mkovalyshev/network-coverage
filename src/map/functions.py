@@ -43,12 +43,21 @@ def coordinates_from_wiki(link: str) -> tuple[float]:
     returns lat/lon coordinates as tuple from Wikipedia city article (tested only on ru.wikipedia.org)
     """
 
-    regex = re.compile(r"lat.*:(\d+.\d+).*lon.*:(\d+.\d+)")
+    regex = re.compile(r'\"lat\":(\d+.\d*).*\"lon\":(\d+.\d*)}')
 
     response = requests.get(link)
-    result = regex.search(response.text)
+    result = regex.search(response.text.replace("\n", ""))
 
-    return Point(float(result.group(1)), float(result.group(2)))
+    x_str = result.group(1)
+    y_str = result.group(2)
+
+    if "." not in x_str:
+        x_str = x_str + ".0"
+    
+    if "." not in y_str:
+        y_str = y_str + ".0"
+
+    return Point(float(x_str), float(y_str))
 
 
 def name_from_wiki(link: str) -> str:
@@ -56,10 +65,10 @@ def name_from_wiki(link: str) -> str:
     returns city name from Wikipedia
     """
 
-    regex = re.compile(r"wgTitle\":\"(\w*?)\"")
+    regex = re.compile(r"wgTitle\":\"(.*?)")
 
     response = requests.get(link)
-    result = regex.search(response.text)
+    result = regex.search(response.text.replace("\n", ""))
 
     return result.group(1)
     

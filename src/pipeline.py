@@ -70,6 +70,6 @@ def check_network_coverage(
                 f"[INFO] [{datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S.%f')}] [network-coverage] city polygon not found"
             )
         else:
-            response[network_type.name] = city_polygon[0][0] == 255
+            response[network_type.name] = bool(city_polygon[0][0] == 255)
 
     return response

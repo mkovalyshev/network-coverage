@@ -43,13 +43,19 @@ def coordinates_from_wiki(link: str) -> tuple[float]:
     returns lat/lon coordinates as tuple from Wikipedia city article (tested only on ru.wikipedia.org)
     """
 
-    regex = re.compile(r'\"lat\":(\d+.\d*).*\"lon\":(\d+.\d*)}')
+    regex = re.compile(r'\"lat\":(\d+.\d*),.*\"lon\":(\d+.\d*)}')
 
     response = requests.get(link)
     result = regex.search(response.text.replace("\n", ""))
 
     x_str = result.group(1)
     y_str = result.group(2)
+
+    if ","  in x_str:
+        x_str = x_str.replace(",", "")
+
+    if ","  in y_str:
+        y_str = y_str.replace(",", "")
 
     if "." not in x_str:
         x_str = x_str + ".0"

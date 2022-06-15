@@ -5,6 +5,7 @@ test*
 /log*
 /data
 parsing.ipynb
+/res*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
